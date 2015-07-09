@@ -5,7 +5,7 @@ CUORE.Component = CUORE.Class(null, {
         this.name = this._generateUUID();
         this.procedure = 'nullProcedure';
         this.SEPARATOR = '_';
-        this.labels = {};
+        this.labels = new CUORE.I18ner(this);
         this.renderer = new CUORE.Renderer();
         this.enabled = true;
         this.behaviour = CUORE.Behaviours.APPEND;
@@ -17,7 +17,7 @@ CUORE.Component = CUORE.Class(null, {
 
     setDirectory: function(directory) {
         this.services = directory;
-        this.requestLabelText();
+        this.labels.requestAll();
     },
 
     behave: function(behaviour) {
@@ -73,9 +73,7 @@ CUORE.Component = CUORE.Class(null, {
     },
 
     getText: function(key) {
-        if(!key) return null;
-
-        return this.labels[key];
+        return this.labels.getText(key);
     },
 
     getName: function() {
@@ -96,36 +94,12 @@ CUORE.Component = CUORE.Class(null, {
     },
 
     setText: function(aKey, aText) {
-        this.labels[aKey] = aText;
+        this.labels.setText(aKey, aText);
         this.updateRender();
     },
 
     setI18NKey: function(key) {
-        if (!key) return;
-
-        this.setText(key, key);
-
-        this.addHandler('LABELS_getLabel_EXECUTED_' + key, new CUORE.Handlers.SetText());
-        this.requestLabelText(key);
-    },
-
-    requestLabelText: function(aKey) {
-
-        if(!aKey){
-            for(var key in this.labels){
-                this._executeLabelsService(key);
-            }
-        }
-        else{
-           this._executeLabelsService(aKey);
-        }
-    },
-
-    _executeLabelsService:function(aKey){
-        if (!this.services) return;
-         this.services.execute("LABELS", 'getLabel', {
-                key: aKey
-            }, true);
+        this.labels.setI18NKey(key);
     },
 
     setRenderer: function(renderer) {

@@ -14,14 +14,14 @@ describe("Core", function() {
         head.removeChild(scriptCore);
     });
 
-    it("provides array.indexOf if not present", function() {
+    xit("provides array.indexOf if not present", function() {
         waits(1);
         runs(function() {
             expect(Array.prototype.indexOf).toBeDefined();
         });
     });
 
-    it("provides a polyfilled array.indexOf that works on arrays without gaps", function() {
+    xit("provides a polyfilled array.indexOf that works on arrays without gaps", function() {
         waits(1);
         runs(function() {
             expect([].indexOf('not-present-element')).toEqual(-1);
@@ -30,7 +30,7 @@ describe("Core", function() {
         });
     });
 
-    it("provides a polyfilled array.indexOf that works on arrays with gaps", function() {
+    xit("provides a polyfilled array.indexOf that works on arrays with gaps", function() {
         waits(1);
         runs(function() {
             var array = [];
