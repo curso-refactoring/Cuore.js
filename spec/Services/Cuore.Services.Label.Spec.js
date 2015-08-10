@@ -92,7 +92,7 @@ describe("LabelsService", function() {
             "Content-Type": "text/text"
         }, jsonMessage);
 
-        expect(aLabelService.cache).toEqual(cacheExpected);
+        expect(aLabelService.cache()).toEqual(cacheExpected);
     });
 
     it("reads document.labels as internal cache when initialized", function() {
@@ -101,7 +101,7 @@ describe("LabelsService", function() {
             "testKey": "testLabel"
         };
         var anotherService = new CUORE.Services.Label();
-        expect(anotherService.cache).toEqual(document.labels);
+        expect(anotherService.cache()).toEqual(document.labels);
     });
 
     it("can use (.) symbol in the name of the keys", function() {
@@ -122,7 +122,7 @@ describe("LabelsService", function() {
             "Content-Type": "text/text"
         }, jsonMessage);
 
-        expect(aLabelService.cache).toEqual(cacheExpected);
+        expect(aLabelService.cache()).toEqual(cache()Expected);
     });
 
     it("prevents execution when key is not present", function() {
@@ -159,7 +159,7 @@ describe("LabelsService", function() {
 
         var message = CUORE.Bus.emit.mostRecentCall.args[1];
         expect(message.getFromAnswer('text')).toEqual(testKey);
-        expect(aLabelService.cache).toEqual(oldCache);
+        expect(aLabelService.cache()).toEqual(oldCache);
     });
 
 

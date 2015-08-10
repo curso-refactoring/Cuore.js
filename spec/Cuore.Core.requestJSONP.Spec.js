@@ -9,7 +9,7 @@ describe("Core request JsonP", function() {
         }, null);
         var scripts = document.getElementsByTagName("script");
         var lastScript = scripts[scripts.length - 1];
-        expect(lastScript.src).toMatch('aUrl' + callbackName + '&hola=mundo&adios=mundocruel&');
+        expect(lastScript.src).toMatch('aUrl' + callbackName + '&hola=mundo&adios=mundocruel');
         expect(lastScript.id).toEqual(callbackName);
     });
 

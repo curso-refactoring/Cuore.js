@@ -4,15 +4,19 @@ CUORE.Services.Label = CUORE.Class(CUORE.Service, {
         CUORE.Services.Label.parent.init.call(this);
 
         this.name = 'LABELS';
-        this.cache = document.labels || {};
+        this.cache = new CUORE.LabelCache(document.labels);
         this.setLocale(navigator.language || navigator.browserLanguage);
+    },
+
+    cache: function() {
+        return this.cache.labels;
     },
 
     setLocale: function(aLocale) {
         if (!aLocale) return;
 
         this.locale = aLocale;
-        this.cache[this.locale] = this.cache[this.locale] || {};
+        this.cache.setLocale(this.locale);
     },
 
     getLabel: function(params, eventName) {
@@ -22,10 +26,8 @@ CUORE.Services.Label = CUORE.Class(CUORE.Service, {
         var cachedLabel = this.fromCache(params.key);
 
         if (cachedLabel) {
-            var cachedResponse = new CUORE.Message();
-            cachedResponse.putMapOnQuery(params);
-            cachedResponse.putOnAnswer('text', cachedLabel);
-            CUORE.Services.Label.parent.emit.call(this, eventNameWithKey, cachedResponse.asJson());
+            var cachedResponse = buildResponse(params, cachedLabel);
+            CUORE.Services.Label.parent.emit.call(this, eventNameWithKey, cachedResponse);
         } else {
             if (!params.locale) params.locale = this.locale;
             var url = this.getBaseURL() + '/labels/get';
@@ -33,14 +35,20 @@ CUORE.Services.Label = CUORE.Class(CUORE.Service, {
         }
     },
 
+    buildResponse: function(params, text) {
+        var cachedResponse = new CUORE.Message();
+        cachedResponse.putMapOnQuery(params);
+        cachedResponse.putOnAnswer('text', text);
+        return cachedResponse.asJson();
+    },
+
     fromCache: function(key) {
-        return this.cache[this.locale][key];
+        var text = this.cache.serve(key);
+        return text;
     },
 
     feedCache: function(theKey, value) {
-        if (value) {
-            this.cache[this.locale][theKey] = value;
-        }
+        this.cache.feed(theKey, value);
     },
 
     emit: function(eventName, response) {
